@@ -8,13 +8,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
-
 	"source.cloud.google.com/agora-262523/gcloud-secret-manager/secretaccess"
 )
 
+// Create inserts a document in the given collection and database
 func Create(dbName string, collectionName string, document interface{}) (interface{}, error) {
 
-	mongoUser, err := RetrieveSecret()
+	mongoUser, err := secretaccess.GetSecret()
 
 	// Create Mongo connection
 	mongoContext, mongoCancel := context.WithTimeout(context.Background(), 10*time.Second)
