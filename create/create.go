@@ -9,12 +9,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 
-	"source.cloud.google.com/agora-262523/gcloud-secret-manager/read-secret"
+	"source.cloud.google.com/agora-262523/gcloud-secret-manager/secretaccess"
 )
 
 func Create(dbName string, collectionName string, document interface{}) (interface{}, error) {
 
-	mongoUser, err := googleCloudSecretManager.RetrieveSecret()
+	mongoUser, err := RetrieveSecret()
 
 	// Create Mongo connection
 	mongoContext, mongoCancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -39,7 +39,7 @@ func Create(dbName string, collectionName string, document interface{}) (interfa
 
 	if insertError != nil {
 		return nil, fmt.Errorf("Error: could not insert document %s, (%s)", document, mongoError)
-	} else {
-		return insertedDocument, nil
 	}
+
+	return insertedDocument, nil
 }
