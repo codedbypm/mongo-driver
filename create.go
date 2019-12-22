@@ -1,0 +1,41 @@
+package mongoDriver
+
+import (
+	"context"
+	"fmt"
+	"time"
+
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo/readpref"
+)
+
+func Create(dbName string, collectionName string, document interface{}) (interface{}, error) {
+
+	// Create Mongo connection
+	mongoContext, mongoCancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer mongoCancel()
+
+	mongoClient, mongoError := mongo.Connect(mongoContext, options.Client().ApplyURI("mongodb://localhost:27017"))
+	mongoError = mongoClient.Ping(mongoContext, readpref.Primary())
+
+	if mongoError != nil {
+		return nil, fmt.Errorf("Error: could not connect to Mongo (%s)", mongoError)
+	}
+
+	// Get collection
+	collection := mongoClient.Database(dbName).Collection(collectionName)
+
+	// Insert data
+	insertContext := context.Background()
+	insertContext, insertCancel := context.WithTimeout(insertContext, 5*time.Second)
+	defer insertCancel()
+
+	insertedDocument, insertError := collection.InsertOne(insertContext, document)
+
+	if insertError != nil {
+		return nil, fmt.Errorf("Error: could not insert document %s, (%s)", document, mongoError)
+	} else {
+		return insertedDocument, nil
+	}
+}
