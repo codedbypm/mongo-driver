@@ -12,10 +12,10 @@ func main() {
 
 	const db = "auth"
 	const collection = "challenges"
-	secret, err := mongoDriver.Create(db, challenges, challenges)
+	document, err := mongoDriver.Create(db, challenges, challenges)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(secret)
+	fmt.Println(document)
 }
