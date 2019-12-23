@@ -5,27 +5,26 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/codedbypm/mongo-driver/connection"
-
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-// Create inserts a document in the given collection and database
-func Create(dbName string, collectionName string, document interface{}) (interface{}, error) {
+// Read fetch a document from the given collection and database
+func Read(dbName string, collectionName string, document interface{}) (interface{}, error) {
 
 	// Create Mongo connection
 	mongoContext, mongoCancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer mongoCancel()
 
-	mongoURI, mongoURIError := connection.GenerateURI()
+	mongoURI, mongoURIError := generateURI()
 	if mongoURIError != nil {
 		return nil, fmt.Errorf("Error: could not generate Mongo URI (%s)", mongoURIError)
 	}
 
 	mongoClient, mongoError := mongo.Connect(mongoContext, options.Client().ApplyURI(mongoURI))
 	mongoError = mongoClient.Ping(mongoContext, readpref.Primary())
+
 	if mongoError != nil {
 		return nil, fmt.Errorf("Error: could not connect to Mongo (%s)", mongoError)
 	}

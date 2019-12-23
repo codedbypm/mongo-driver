@@ -27,6 +27,8 @@ github.com/codedbypm/gcloud-secret-manager v0.0.0-20191223081938-fbcf235b2f0f h1
 github.com/codedbypm/gcloud-secret-manager v0.0.0-20191223081938-fbcf235b2f0f/go.mod h1:CCBd8/2BqQjiMaObN1C2bdlm5bKltBaN2EIUC0jxyec=
 github.com/codedbypm/gcloud-secret-manager v0.0.0-20191223083829-92fcac6c0816 h1:QJa3DZq1C6Yu8ccFYmn7BBI6yrt5bwHNqN3D/vQrZto=
 github.com/codedbypm/gcloud-secret-manager v0.0.0-20191223083829-92fcac6c0816/go.mod h1:CCBd8/2BqQjiMaObN1C2bdlm5bKltBaN2EIUC0jxyec=
+github.com/codedbypm/gcloud-secret-manager v0.0.0-20191223162904-0bc3d136315c h1:Gsb9Qzrbd9BPty5sOu5WFhcUSvNBvYZIgb5y8ulAvaI=
+github.com/codedbypm/gcloud-secret-manager v0.0.0-20191223162904-0bc3d136315c/go.mod h1:CCBd8/2BqQjiMaObN1C2bdlm5bKltBaN2EIUC0jxyec=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/envoyproxy/go-control-plane v0.9.1-0.20191026205805-5f8ba28d4473/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=

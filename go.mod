@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/DataDog/zstd v1.4.4 // indirect
-	github.com/codedbypm/gcloud-secret-manager v0.0.0-20191223083829-92fcac6c0816
+	github.com/codedbypm/gcloud-secret-manager v0.0.0-20191223162904-0bc3d136315c
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/pkg/errors v0.8.1 // indirect
