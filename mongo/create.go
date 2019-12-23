@@ -1,4 +1,4 @@
-package crudactions
+package mongo
 
 import (
 	"context"
