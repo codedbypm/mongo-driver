@@ -12,8 +12,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-// Create inserts a document in the given collection and database
-func Create(dbName string, collectionName string, document interface{}) (interface{}, error) {
+// Read fetch a document from the given collection and database
+func Read(dbName string, collectionName string, document interface{}) (interface{}, error) {
 
 	// Create Mongo connection
 	mongoContext, mongoCancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -26,6 +26,7 @@ func Create(dbName string, collectionName string, document interface{}) (interfa
 
 	mongoClient, mongoError := mongo.Connect(mongoContext, options.Client().ApplyURI(mongoURI))
 	mongoError = mongoClient.Ping(mongoContext, readpref.Primary())
+
 	if mongoError != nil {
 		return nil, fmt.Errorf("Error: could not connect to Mongo (%s)", mongoError)
 	}
