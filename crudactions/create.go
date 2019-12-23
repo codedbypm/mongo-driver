@@ -5,22 +5,45 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/codedbypm/gcloud-secret-manager/access"
+	"github.com/codedbypm/gcloud-secret-manager/decrypt"
+
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
-	// "source.cloud.google.com/agora-262523/gcloud-secret-manager/secretaccess"
 )
 
 // Create inserts a document in the given collection and database
 func Create(dbName string, collectionName string, document interface{}) (interface{}, error) {
 
-	// mongoUser, err := secretaccess.GetSecret()
+	const mongoUserSecretName = "agora-secret-mongo-user"
+	const mongoPassSecretName = "agora-secret-mongo-pass"
+	const keyID = "projects/agora-262523/locations/europe-west1/keyRings/agora-key-ring/cryptoKeys/agora-key/cryptoKeyVersions/latest"
+
+	mongoUserSecret, secretError := access.GetSecret("agora-262523", mongoUserSecretName)
+	if secretError != nil {
+		return nil, fmt.Errorf("Error: could not retrieve secret %s (%s)", mongoUserSecretName, secretError)
+	}
+
+	mongoPassSecret, secretError := access.GetSecret("agora-262523", mongoPassSecretName)
+	if secretError != nil {
+		return nil, fmt.Errorf("Error: could not retrieve secret %s (%s)", mongoPassSecretName, secretError)
+	}
+
+	mongoUser, decryptError := decrypt.DecryptSymmetric(keyID, mongoUserSecret.Payload.Data)
+	if decryptError != nil {
+		return nil, fmt.Errorf("Error: could not decrypt secret %s (%s)", secretError)
+	}
+
+	mongoPass, decryptError := decrypt.DecryptSymmetric(keyID, mongoPassSecret.Payload.Data)
+
+	var mongoURI = fmt.Sprint("mongodb+srv://%s:%s@agorapolis-001-ymzlz.gcp.mongodb.net", mongoUser, mongoPass)
 
 	// Create Mongo connection
 	mongoContext, mongoCancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer mongoCancel()
 
-	mongoClient, mongoError := mongo.Connect(mongoContext, options.Client().ApplyURI("mongodb://localhost:27017"))
+	mongoClient, mongoError := mongo.Connect(mongoContext, options.Client().ApplyURI(mongoURI))
 	mongoError = mongoClient.Ping(mongoContext, readpref.Primary())
 
 	if mongoError != nil {
