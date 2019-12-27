@@ -17,7 +17,11 @@ func Read(dbName string, collectionName string, document interface{}) (interface
 	mongoContext, mongoCancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer mongoCancel()
 
-	mongoURI, mongoURIError := generateURI()
+	const keyRingName = "agora-key-ring"
+	const keyName = "agora-crypto-key"
+	const projectID = "agora-polis"
+
+	mongoURI, mongoURIError := generateURI(projectID, keyRingName, keyName)
 	if mongoURIError != nil {
 		return nil, fmt.Errorf("Error: could not generate Mongo URI (%s)", mongoURIError)
 	}
