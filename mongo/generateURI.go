@@ -2,24 +2,23 @@ package mongo
 
 import (
 	"fmt"
-	secretmanager "github.com/codedbypm/gcloud-secret-manager/secretmanager"
+	"github.com/codedbypm/gcloud-secret-manager/secretmanager"
 )
 
-func generateURI(projectID string, keyRingName string, keyName string) (string, error) {
+func GenerateURI(projectID string) (string, error) {
 	const mongoUserSecretName = "agora-secret-mongo-user"
 	const mongoPassSecretName = "agora-secret-mongo-pass"
-	keyID := fmt.Sprintf("projects/%s/locations/europe-west1/keyRings/%s/cryptoKeys/%s/cryptoKeyVersions/latest", projectID, keyRingName, keyName)
 
-	mongoUser, err := secretmanager.DecryptSecretSymmetric(mongoUserSecretName, projectID, keyID)
+	mongoUserData, err := secretmanager.GetSecretData(mongoUserSecretName, projectID)
 	if err != nil {
 		return "", fmt.Errorf("Error: could not retrieve secret %s (%s)", mongoUserSecretName, err)
 	}
 
-	mongoPass, err := secretmanager.DecryptSecretSymmetric(mongoPassSecretName, projectID, keyID)
+	mongoPassData, err := secretmanager.GetSecretData(mongoPassSecretName, projectID)
 	if err != nil {
 		return "", fmt.Errorf("Error: could not retrieve secret %s (%s)", mongoPassSecretName, err)
 	}
 
-	var uri = fmt.Sprintf("mongodb+srv://%s:%s@agorapolis-001-ymzlz.gcp.mongodb.net", mongoUser, mongoPass)
+	var uri = fmt.Sprintf("mongodb+srv://%s:%s@agorapolis-001-ymzlz.gcp.mongodb.net", string(mongoUserData), string(mongoPassData))
 	return uri, nil
 }

@@ -21,7 +21,7 @@ func Create(dbName string, collectionName string, document interface{}) (interfa
 	const keyName = "agora-crypto-key"
 	const projectID = "agora-polis"
 
-	mongoURI, mongoURIError := generateURI(projectID, keyRingName, keyName)
+	mongoURI, mongoURIError := GenerateURI(projectID)
 	if mongoURIError != nil {
 		return nil, fmt.Errorf("Error: could not generate Mongo URI (%s)", mongoURIError)
 	}
