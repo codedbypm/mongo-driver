@@ -8,7 +8,7 @@ import (
 func generateURI(projectID string, keyRingName string, keyName string) (string, error) {
 	const mongoUserSecretName = "agora-secret-mongo-user"
 	const mongoPassSecretName = "agora-secret-mongo-pass"
-	const keyID = fmt.Sprintf("projects/%s/locations/europe-west1/keyRings/%s/cryptoKeys/%s/cryptoKeyVersions/latest", projectID, keyRingName, keyName)
+	keyID := fmt.Sprintf("projects/%s/locations/europe-west1/keyRings/%s/cryptoKeys/%s/cryptoKeyVersions/latest", projectID, keyRingName, keyName)
 
 	mongoUser, err := secretmanager.DecryptSecretSymmetric(mongoUserSecretName, projectID, keyID)
 	if err != nil {
