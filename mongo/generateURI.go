@@ -20,6 +20,6 @@ func generateURI(projectID string, keyRingName string, keyName string) (string, 
 		return "", fmt.Errorf("Error: could not retrieve secret %s (%s)", mongoPassSecretName, err)
 	}
 
-	var uri = fmt.Sprint("mongodb+srv://%s:%s@agorapolis-001-ymzlz.gcp.mongodb.net", mongoUser, mongoPass)
+	var uri = fmt.Sprintf("mongodb+srv://%s:%s@agorapolis-001-ymzlz.gcp.mongodb.net", mongoUser, mongoPass)
 	return uri, nil
 }
