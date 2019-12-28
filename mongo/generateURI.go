@@ -5,16 +5,17 @@ import (
 	"github.com/codedbypm/gcloud-secret-manager/secretmanager"
 )
 
-func GenerateURI(projectID string) (string, error) {
+func GenerateURI() (string, error) {
+	const gcloudProjectID = "agora-polis"
 	const mongoUserSecretName = "agora-secret-mongo-user"
 	const mongoPassSecretName = "agora-secret-mongo-pass"
 
-	mongoUserData, err := secretmanager.GetSecretData(mongoUserSecretName, projectID)
+	mongoUserData, err := secretmanager.GetSecretData(mongoUserSecretName, gcloudProjectID)
 	if err != nil {
 		return "", fmt.Errorf("Error: could not retrieve secret %s (%s)", mongoUserSecretName, err)
 	}
 
-	mongoPassData, err := secretmanager.GetSecretData(mongoPassSecretName, projectID)
+	mongoPassData, err := secretmanager.GetSecretData(mongoPassSecretName, gcloudProjectID)
 	if err != nil {
 		return "", fmt.Errorf("Error: could not retrieve secret %s (%s)", mongoPassSecretName, err)
 	}

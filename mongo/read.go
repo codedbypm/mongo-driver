@@ -11,24 +11,19 @@ import (
 )
 
 // Read fetch a document from the given collection and database
-func Read(dbName string, collectionName string, document interface{}) (interface{}, error) {
+func Read(dbName string, collectionName string) (interface{}, error) {
 
 	// Create Mongo connection
 	mongoContext, mongoCancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer mongoCancel()
 
-	const keyRingName = "agora-key-ring"
-	const keyName = "agora-crypto-key"
-	const projectID = "agora-polis"
-
-	mongoURI, mongoURIError := GenerateURI(projectID)
+	mongoURI, mongoURIError := GenerateURI()
 	if mongoURIError != nil {
 		return nil, fmt.Errorf("Error: could not generate Mongo URI (%s)", mongoURIError)
 	}
 
 	mongoClient, mongoError := mongo.Connect(mongoContext, options.Client().ApplyURI(mongoURI))
 	mongoError = mongoClient.Ping(mongoContext, readpref.Primary())
-
 	if mongoError != nil {
 		return nil, fmt.Errorf("Error: could not connect to Mongo (%s)", mongoError)
 	}
