@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/codedbypm/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func main() {
@@ -17,7 +18,7 @@ func main() {
 
 func createURI() {
 	// create URI
-	mongoURI, err := mongo.GenerateURI("agora-polis")
+	mongoURI, err := mongo.GenerateURI()
 	if err != nil {
 		log.Print(err)
 		return
@@ -46,14 +47,9 @@ func createAuthChallenge() {
 
 func readAuthChallenges() {
 
-	// Decode the JSON
-	challenge := struct {
-		Id           string
-		Content      string
-		CreationDate time.Time
-	}{}
+	filter := bson.D{{"content", "paolo"}}
 
-	challenges, err := mongo.Read("auth", "challenges")
+	challenges, err := mongo.ReadOne("auth", "challenges", filter)
 	if err != nil {
 		log.Print(err)
 		return

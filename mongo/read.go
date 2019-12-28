@@ -11,7 +11,7 @@ import (
 )
 
 // Read fetch a document from the given collection and database
-func Read(dbName string, collectionName string) (interface{}, error) {
+func ReadOne(dbName string, collectionName string, filter interface{}) (interface{}, error) {
 
 	// Create Mongo connection
 	mongoContext, mongoCancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -32,15 +32,14 @@ func Read(dbName string, collectionName string) (interface{}, error) {
 	collection := mongoClient.Database(dbName).Collection(collectionName)
 
 	// Insert data
-	insertContext := context.Background()
-	insertContext, insertCancel := context.WithTimeout(insertContext, 5*time.Second)
+	findOneContext := context.Background()
+	findOneContext, insertCancel := context.WithTimeout(findOneContext, 5*time.Second)
 	defer insertCancel()
 
-	insertedDocument, insertError := collection.InsertOne(insertContext, document)
-
-	if insertError != nil {
-		return nil, fmt.Errorf("Error: could not insert document %s, (%s)", document, mongoError)
+	var document interface{}
+	resultError := collection.FindOne(findOneContext, filter).Decode(&document)
+	if resultError != nil {
+		return nil, fmt.Errorf("Error: could not read document %s, (%s)", document, resultError)
 	}
-
-	return insertedDocument, nil
+	return document, nil
 }
